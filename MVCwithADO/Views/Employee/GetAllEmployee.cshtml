@@ -1,0 +1,89 @@
+﻿@model IEnumerable<MVCwithADO.Models.EmployeeViewModel>
+
+@{
+    ViewBag.Title = "GetAllEmployee";
+}
+
+
+<h2>Employee List</h2>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success" id="successMessage">
+        @TempData["SuccessMessage"]
+    </div>
+
+    <script>
+        setTimeout(function () {
+            var message = document.getElementById("successMessage");
+            if (message) {
+                message.style.display = 'none'; // Hide the message after 10 seconds
+            }
+        }, 10000); // 10 seconds
+    </script>
+}
+
+<p>
+    <a href="@Url.Action("AddEmployee", "Employee")" class="btn btn-success">Create New</a>
+
+</p>
+<table class="table table-striped" id="dataTables-example">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Empid)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Designation)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Salary)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.City)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address)
+        </th>
+        <th>Action</th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.DesignationName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Salary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.City)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Empid }, new {@class="btn btn-warning btn-sm"}) |
+                @* @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
+                @Html.ActionLink("Delete", "DeleteEmployee", "Employee", new { id = item.Empid },
+                       new
+                            {
+                                @class = "btn btn-danger btn-sm",
+                             onclick = "return confirm('Are you sure you want to delete this record?');"
+                            })
+            </td>
+        </tr>
+    }
+
+</table>
+

@@ -1,0 +1,53 @@
+﻿@model MVCwithADO.Models.EmployeeViewModel
+
+@{
+    ViewBag.Title = "AddEmployee";
+}
+
+<h2>AddEmployee</h2>
+
+
+@using (Html.BeginForm("AddEmployee", "Employee", FormMethod.Post))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="form-group">
+        @Html.Label("Employee Name")
+        @Html.TextBoxFor(m => m.Employee.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Employee.Name)
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Designation")
+        @Html.DropDownListFor(m => m.Designation.DesignationId, Model.DesignationList, "Select Designation", new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Designation.DesignationId)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Employee.City)
+        @Html.TextBoxFor(m => m.Employee.City, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Employee.City)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Employee.Address)
+        @Html.TextBoxFor(m => m.Employee.Address, new { @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.Employee.Address)
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(m => m.Employee.Salary)
+        @Html.TextBoxFor(m => m.Employee.Salary, new { @class = "form-control", type = "number" })
+        @Html.ValidationMessageFor(m => m.Employee.Salary)
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Add Employee</button>
+    <br />
+    <div>
+        @Html.ActionLink("Back to List", "GetAllEmployee")
+    </div>
+}
+
+    @section Scripts {
+        @Scripts.Render("~/bundles/jqueryval")
+    }
