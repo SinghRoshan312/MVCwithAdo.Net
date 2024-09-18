@@ -1,0 +1,81 @@
+create table tbl_Employee(
+EmpId int primary key identity(1,1),
+EmployeeName nvarchar(100),
+DesignationId int,
+Salary numeric(10,2),
+City nvarchar(50),
+Address nvarchar(500),
+Deleted bit default(0),
+CreatedDate datetime
+)
+
+create table tbl_Designation
+(
+	DesignationId int primary key identity(1,1),
+	Designation nvarchar(100),
+	deleted bit default(0)
+)
+
+insert into tbl_Employee values('Roshan',1,42000,'Mumbai','Vasai',0,GETDATE()),('Singh',2,22000,'Mumbai','Malad',0,GETDATE())
+
+
+
+
+create procedure sp_EmpDetails
+(
+	@action nvarchar(50),
+	@deleted bit=0
+)
+as 
+begin
+	if @action='FindAll'
+	begin
+		select e.EmpId,e.EmployeeName,e.Salary,e.City,e.Address,d.Designation,e.DesignationId from tbl_Employee e
+		left join tbl_Designation d on e.DesignationId=d.DesignationId
+		where e.Deleted=@deleted
+	End
+	else if @action='FindAllDesignation'
+	begin
+		select designationid,designation from tbl_Designation where deleted=@deleted
+	end
+ENd
+
+
+
+
+create procedure sp_Add_Update_EmpDetails
+(
+	@action nvarchar(50),
+	@EmpId int,
+	@EmpName nvarchar(250),
+	@DesignationId int,
+	@City nvarchar(50),
+	@Address nvarchar(500),
+	@Salary numeric(10,2),
+	@deleted bit
+	--@createddate datetime
+)
+as 
+begin
+	if @action='AddEmployee'
+	begin
+		insert into tbl_Employee (EmployeeName,DesignationId,Salary,City,Address,Deleted,CreatedDate) values 
+		(@EmpName,@DesignationId,@Salary,@City,@Address,@deleted,GETDATE())
+	end
+	else if @action='UpdateEmployee'
+	begin
+		update tbl_Employee
+		set EmployeeName=@EmpName,
+		Salary=@Salary,
+		City=@City,
+		Address=@Address,
+		DesignationId=@DesignationId
+		where EmpId=@EmpId
+	end
+	else if @action='DeleteEmployee'
+	begin 
+		update tbl_Employee
+		set Deleted=@deleted
+		where EmpId=@EmpId
+	end
+End
